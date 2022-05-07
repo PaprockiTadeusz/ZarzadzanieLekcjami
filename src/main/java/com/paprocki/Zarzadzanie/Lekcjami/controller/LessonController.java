@@ -9,6 +9,7 @@ import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/lessons")
@@ -70,5 +71,16 @@ public class LessonController {
         return new ResponseEntity(newLesson, HttpStatus.OK);
     }
 
-
+    @PatchMapping
+    public ResponseEntity editLessonPartially(@RequestBody Lesson updatedLesson) {
+        if (lessons.stream().noneMatch(les -> les.getLessonId() == updatedLesson.getLessonId())) {
+            return new ResponseEntity("Lekcja o podanym id juz istnieje", HttpStatus.BAD_REQUEST);
+        }
+        Lesson newLesson = lessons.stream().filter(l -> l.getLessonId() == updatedLesson.getLessonId()).findAny().get();
+        Optional.ofNullable(updatedLesson.getTopic()).ifPresent(newLesson::setTopic);
+        Optional.ofNullable(updatedLesson.getDate()).ifPresent(newLesson::setDate);
+        Optional.ofNullable(updatedLesson.getStudentName()).ifPresent(newLesson::setStudentName);
+        Optional.ofNullable(updatedLesson.getTeacherName()).ifPresent(newLesson::setTeacherName);
+        return new ResponseEntity(newLesson, HttpStatus.OK);
+    }
 }
