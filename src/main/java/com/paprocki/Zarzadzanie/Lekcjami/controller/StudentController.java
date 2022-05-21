@@ -57,12 +57,16 @@ public class StudentController {
         student.setRate(updatedStudent.getRate());
         return new ResponseEntity(student, HttpStatus.OK);
     }
+
     @PatchMapping
-    public ResponseEntity editStudentPartially(@RequestBody Student updatedStudent){
-        if (students.stream().noneMatch(student -> student.getEmail().equals(updatedStudent.getEmail()))){
+    public ResponseEntity editStudentPartially(@RequestBody Student updatedStudent) {
+        if (students.stream().noneMatch(student -> student.getEmail().equals(updatedStudent.getEmail()))) {
             return new ResponseEntity("Brak studenta o danym emailu", HttpStatus.BAD_REQUEST);
         }
-        Student newStudent = (Student) students.stream().filter(s -> s.getEmail().equals(updatedStudent.getEmail()));
+        Student newStudent = students.stream()
+                .filter(s -> s.getEmail().equals(updatedStudent.getEmail()))
+                .findAny()
+                .get();
         Optional.ofNullable(updatedStudent.getEmail()).ifPresent(newStudent::setEmail);
         Optional.ofNullable(updatedStudent.getName()).ifPresent(newStudent::setEmail);
         Optional.ofNullable(updatedStudent.getRate()).ifPresent(newStudent::setRate);

@@ -33,7 +33,7 @@ public class LessonController {
     public ResponseEntity getSingleLesson(@PathVariable long lessonId) {
         return lessons.stream()
                 .filter(lesson -> lesson.getLessonId() == lessonId)
-                .findFirst()// czy moze byc tez findAny
+                .findFirst()
                 .map(lesson -> new ResponseEntity(lesson, HttpStatus.OK))
                 .orElse(new ResponseEntity("Brak lekcji o podanym id " + lessonId, HttpStatus.NOT_FOUND));
 //                .orElseGet(() -> new ResponseEntity("Brak lekcji o podanym id " + lessonId, HttpStatus.NOT_FOUND));
