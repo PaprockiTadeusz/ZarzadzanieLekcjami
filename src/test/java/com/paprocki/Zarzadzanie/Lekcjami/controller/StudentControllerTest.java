@@ -12,9 +12,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.util.Optional;
-
-
 @SpringBootTest
 @AutoConfigureMockMvc
 class StudentControllerTest {
@@ -57,7 +54,7 @@ class StudentControllerTest {
     }
 
     @Test
-    void shouldCorrectlyAddStudentNegative() throws Exception {
+    void shouldCorrectlyAddStudentNegative() throws Exception { //todo popraw nazwe
         Student studentToAdd = new Student("Janek", "jano2@gmail.com", "Nauczyciel teahcer", 200);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/students")
@@ -72,6 +69,7 @@ class StudentControllerTest {
                 .andExpect(MockMvcResultMatchers.content().string("Konto z takim email już istnieje"));
     }
 
+
     @Test
     void shouldUpdateStudent() throws Exception {
         Student studentToAdd = new Student("Adam", "adam@gmail.com", "Nauczyciel teahcer", 200);
@@ -82,6 +80,7 @@ class StudentControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isCreated());
 
         Student studentToUpdate = new Student("Mikolaj", "adam@gmail.com", "Fajny teahcer", 300);
+//        String email = studentToUpdate.getEmail();
         mockMvc.perform(MockMvcRequestBuilders.put("/students")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(studentToUpdate)))
@@ -95,19 +94,19 @@ class StudentControllerTest {
 
     @Test
     void shouldUpdateStudentPartially() throws Exception {
-        Student studentToAdd = new Student("Adam", "adam@gmail.com", "Nauczyciel teahcer", 200);
+        Student studentToAdd = new Student("Adam", "adamm@gmail.com", "Nauczyciel teahcer", 200);
         mockMvc.perform(MockMvcRequestBuilders.post("/students")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(studentToAdd)))
                 .andExpect(MockMvcResultMatchers.status().isCreated());
 
-        Student studentToUpdate = new Student("Bartek", "adam@gmail.com", null, null);
+        Student studentToUpdate = new Student("Bartek", "adamm@gmail.com", null, null);
         mockMvc.perform(MockMvcRequestBuilders.patch("/students")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(studentToUpdate)))
                 .andExpect(MockMvcResultMatchers.status().is(200))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Bartek"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.email").value("adam@gmail.com"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.email").value(studentToUpdate.getEmail()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.teacher").value("Nauczyciel teahcer"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.rate").value(200));
     }

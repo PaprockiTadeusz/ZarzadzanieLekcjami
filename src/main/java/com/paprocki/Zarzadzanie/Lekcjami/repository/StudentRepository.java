@@ -29,25 +29,26 @@ public class StudentRepository {
         return students;
     }
 
-    public Student updateStudent(Student student) {
-        Student foundedStudent = findByEmail(student.getEmail()).get();
-        foundedStudent.setEmail(student.getEmail());
-        foundedStudent.setName(student.getName());
-        foundedStudent.setTeacher(student.getTeacher());
-        foundedStudent.setRate(student.getRate());
-        return foundedStudent;
+    public Optional<Student> updateStudent(Student student) {
+        Optional<Student> optionalStudent = findByEmail(student.getEmail());
+        if (optionalStudent.isPresent()) {
+            Student foundedStudent = optionalStudent.get();
+            foundedStudent.setName(student.getName());
+            foundedStudent.setTeacher(student.getTeacher());
+            foundedStudent.setRate(student.getRate());
+        }
+        return optionalStudent;
     }
 
-    public Student partiallyUpdateStudent(Student student) {
-        Student newStudent = students.stream()
-                .filter(s -> s.getEmail().equals(student.getEmail()))
-                .findAny()
-                .get();
-        Optional.ofNullable(student.getEmail()).ifPresent(newStudent::setEmail);
-        Optional.ofNullable(student.getName()).ifPresent(newStudent::setEmail);
-        Optional.ofNullable(student.getRate()).ifPresent(newStudent::setRate);
-        Optional.ofNullable(student.getTeacher()).ifPresent(newStudent::setTeacher);
-        return newStudent;
+    public Optional<Student> partiallyUpdateStudent(Student student) {
+        Optional<Student> optionalStudent = findByEmail(student.getEmail());
+        if (optionalStudent.isPresent()) {
+            Student updatedStudent = optionalStudent.get();
+            Optional.ofNullable(student.getName()).ifPresent(updatedStudent::setName);
+            Optional.ofNullable(student.getRate()).ifPresent(updatedStudent::setRate);
+            Optional.ofNullable(student.getTeacher()).ifPresent(updatedStudent::setTeacher);
+        }
+        return optionalStudent;
     }
 
     public boolean add(Student student) {

@@ -23,24 +23,11 @@ public class StudentService {
     }
 
     public Optional<Student> editStudent(Student updatedStudent) {
-        Optional<Student> student = studentRepository.findByEmail(updatedStudent.getEmail());
-        if (student.isPresent()) {
-            Student student1 = studentRepository.updateStudent(student.get());
-            return Optional.of(student1);
-        } else {
-            return Optional.empty();
-        }
+        return studentRepository.updateStudent(updatedStudent);
     }
 
     public Optional<Student> editStudentPartially(Student updatedStudent) {
-        String email = updatedStudent.getEmail();
-        Optional<Student> student = studentRepository.findByEmail(email);
-        if (student.isPresent()) {
-            Student student1 = studentRepository.partiallyUpdateStudent(student.get());
-            return Optional.of(student1);
-        } else {
-            return Optional.empty();
-        }
+        return studentRepository.partiallyUpdateStudent(updatedStudent);
     }
 
     public boolean addStudent(Student student) {

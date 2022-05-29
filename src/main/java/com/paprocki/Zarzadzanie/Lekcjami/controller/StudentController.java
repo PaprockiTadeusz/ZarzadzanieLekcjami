@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
@@ -24,8 +23,7 @@ public class StudentController {
 
     @GetMapping("/{email}")
     public ResponseEntity<Student> getSingleStudent(@PathVariable String email) {
-        Optional<Student> singleStudent = studentService.getSingleStudent(email);
-        return singleStudent
+        return studentService.getSingleStudent(email)
                 .map(student -> new ResponseEntity<>(student, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity("Brak studenta o danym emailu " + email, HttpStatus.NOT_FOUND));
     }
@@ -41,17 +39,19 @@ public class StudentController {
     }
 
     @PutMapping()
-    public ResponseEntity editStudent(@RequestBody Student updatedStudent) {
-        Optional<Student> student = studentService.editStudent(updatedStudent);
-        return student.map(s -> new ResponseEntity(s, HttpStatus.OK))
+    public ResponseEntity<Student> editStudent(@RequestBody Student updatedStudent) {
+        return studentService.editStudent(updatedStudent)
+                .map(s -> new ResponseEntity<>(s, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity("Brak studenta o danym emailu " + updatedStudent.getEmail(), HttpStatus.NOT_FOUND));
     }
 
+
     @PatchMapping
-    public ResponseEntity editStudentPartially(@RequestBody Student updatedStudent) {
-        Optional<Student> student = studentService.editStudentPartially(updatedStudent);
-        return student.map(s -> new ResponseEntity(s, HttpStatus.OK))
+    public ResponseEntity<Student> editStudentPartially(@RequestBody Student updatedStudent) {
+        return studentService.editStudentPartially(updatedStudent)
+                .map(s -> new ResponseEntity<>(s, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity("Brak studenta o danym emailu " + updatedStudent.getEmail(), HttpStatus.NOT_FOUND));
     }
+    
 
 }
