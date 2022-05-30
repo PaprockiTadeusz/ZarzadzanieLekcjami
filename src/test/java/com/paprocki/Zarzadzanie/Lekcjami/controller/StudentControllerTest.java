@@ -54,7 +54,7 @@ class StudentControllerTest {
     }
 
     @Test
-    void shouldCorrectlyAddStudentNegative() throws Exception { //todo popraw nazwe
+    void shouldNotCorrectlyAddStudent() throws Exception {
         Student studentToAdd = new Student("Janek", "jano2@gmail.com", "Nauczyciel teahcer", 200);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/students")
@@ -73,14 +73,12 @@ class StudentControllerTest {
     @Test
     void shouldUpdateStudent() throws Exception {
         Student studentToAdd = new Student("Adam", "adam@gmail.com", "Nauczyciel teahcer", 200);
-
         mockMvc.perform(MockMvcRequestBuilders.post("/students")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(studentToAdd)))
                 .andExpect(MockMvcResultMatchers.status().isCreated());
 
         Student studentToUpdate = new Student("Mikolaj", "adam@gmail.com", "Fajny teahcer", 300);
-//        String email = studentToUpdate.getEmail();
         mockMvc.perform(MockMvcRequestBuilders.put("/students")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(studentToUpdate)))
