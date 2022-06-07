@@ -25,32 +25,31 @@ public class TeacherController {
     public ResponseEntity getOneTeacher(@PathVariable String email) {
         Optional<Teacher> newTeacher = teacherService.getSingleTeacher(email);
         return newTeacher.map(teacher -> new ResponseEntity(teacher, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity("Brak nauczyciela o danym emailu " + email , HttpStatus.BAD_REQUEST ));
+                .orElseGet(() -> new ResponseEntity("Brak nauczyciela o danym emailu " + email, HttpStatus.BAD_REQUEST));
     }
+
     @PostMapping
-    public ResponseEntity addTeacher(@RequestBody Teacher teacher){
-        boolean result = teacherService.addNewTeacher(teacher);
-        if(result) {
+    public ResponseEntity addTeacher(@RequestBody Teacher teacher) {
+        if (teacherService.addNewTeacher(teacher)) {
             return new ResponseEntity<>(teacher, HttpStatus.CREATED);
-        }
-        else {
+        } else {
             return new ResponseEntity("Konto z takim emailem już istnieje", HttpStatus.BAD_REQUEST);
         }
     }
 
     @PutMapping()
-    public ResponseEntity editTeacher(@RequestBody Teacher updatedTeacher){
+    public ResponseEntity editTeacher(@RequestBody Teacher updatedTeacher) {
         return teacherService.editTeacher(updatedTeacher)
                 .map(t -> new ResponseEntity<>(t, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity("Brak nauczyciela o danym mailu " + updatedTeacher.getEmail(), HttpStatus.NOT_FOUND));
     }
+
     @PatchMapping
     public ResponseEntity editTeacherPartially(@RequestBody Teacher updatedTeacher) {
         return teacherService.editTeacherPartially(updatedTeacher)
                 .map(t -> new ResponseEntity<>(t, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity("Brak nauczyciela o danym mailu " + updatedTeacher.getEmail(), HttpStatus.NOT_FOUND));
     }
-
 
 
 }

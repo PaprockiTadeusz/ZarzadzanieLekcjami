@@ -59,6 +59,7 @@ public class StudentLessonController {
                 .andExpect(MockMvcResultMatchers.content().string("Brak lekcji o podanym id " + id));
 
     }
+
     @Test
     void shouldCorrectlyAddLesson() throws Exception {
         Lesson lessonToAdd = new Lesson(8, LocalDate.of(2020, 01, 8), "Erykkk Dobaj", "TTTaduesz Paprocki", "Spring");
@@ -82,17 +83,17 @@ public class StudentLessonController {
     @DisplayName("Should correctly edit lesson")
     void shouldUpdateLesson() throws Exception {
 
-        Lesson lessonToAdd = new Lesson(7, LocalDate.of(2019,12,12), "Barbara Kwarc", "Alfred Zbigniewski", "Astrologia");
+        Lesson lessonToAdd = new Lesson(7, LocalDate.of(2019, 12, 12), "Barbara Kwarc", "Alfred Zbigniewski", "Astrologia");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/lessons")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(lessonToAdd)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(lessonToAdd)))
                 .andExpect(MockMvcResultMatchers.status().isCreated());
 
-        Lesson lessonToUpdate = new Lesson(7, LocalDate.of(2017,11,3), "a", "b", "c");
+        Lesson lessonToUpdate = new Lesson(7, LocalDate.of(2017, 11, 3), "a", "b", "c");
         mockMvc.perform(MockMvcRequestBuilders.put("/lessons")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(lessonToUpdate)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(lessonToUpdate)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.lessonId").value(7))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.teacherName").value("a"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.studentName").value("b"))
@@ -101,15 +102,15 @@ public class StudentLessonController {
 
     @Test
     @DisplayName("Should correctly partially edit Lesson")
-    void shouldUpdateLessonPartially() throws Exception{
-        Lesson lessonToAdd = new Lesson(7, LocalDate.of(2019,12,12), "Barbara Kwarc", "Alfred Zbigniewski", "Astrologia");
+    void shouldUpdateLessonPartially() throws Exception {
+        Lesson lessonToAdd = new Lesson(7, LocalDate.of(2019, 12, 12), "Barbara Kwarc", "Alfred Zbigniewski", "Astrologia");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/lessons")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(lessonToAdd)))
                 .andExpect(MockMvcResultMatchers.status().isCreated());
 
-        Lesson lessonToUpdate = new Lesson(7, LocalDate.of(2017,11,3), null, null, null);
+        Lesson lessonToUpdate = new Lesson(7, LocalDate.of(2017, 11, 3), null, null, null);
         mockMvc.perform(MockMvcRequestBuilders.patch("/lessons")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(lessonToUpdate)))

@@ -14,12 +14,17 @@ public class TeacherService {
 
     private final TeacherRepository teacherRepository;
 
-    public Optional<Teacher> getSingleTeacher(String email){return teacherRepository.findTeacherByEmail(email);}
-    public List<Teacher> getAllTeachers(){return teacherRepository.getAll();}
+    public Optional<Teacher> getSingleTeacher(String email) {
+        return teacherRepository.findTeacherByEmail(email);
+    }
+
+    public List<Teacher> getAllTeachers() {
+        return teacherRepository.getAll();
+    }
 
     public boolean addNewTeacher(Teacher teacher) {
         Optional<Teacher> optionalTeacher = teacherRepository.findTeacherByEmail(teacher.getEmail());
-        if(optionalTeacher.isPresent()){
+        if (optionalTeacher.isPresent()) {
             return false;
         } else {
             return teacherRepository.addTeacher(teacher);
@@ -30,7 +35,7 @@ public class TeacherService {
         return teacherRepository.updateTeacher(updatedTeacher);
     }
 
-    public Optional<Teacher> editTeacherPartially(Teacher updatedTeacher){
+    public Optional<Teacher> editTeacherPartially(Teacher updatedTeacher) {
         return teacherRepository.partiallyUpdateTeacher(updatedTeacher);
     }
 }

@@ -20,6 +20,7 @@ public class TeacherRepository {
         teachers.add(new Teacher("Arkadiusz Domański", "arkadiusz.domanski@gmail.com"));
         teachers.add(new Teacher("Zbigniew Wodzimski", "zgigniew.wodzimski@gmail.com"));
     }
+
     public Optional<Teacher> findTeacherByEmail(String email) {
         return teachers.stream()
                 .filter(teacher -> teacher.getEmail().equals(email))
@@ -32,7 +33,7 @@ public class TeacherRepository {
 
     public Optional<Teacher> updateTeacher(Teacher teacher) {
         Optional<Teacher> optionalTeacher = findTeacherByEmail(teacher.getEmail());
-        if(optionalTeacher.isPresent()) {
+        if (optionalTeacher.isPresent()) {
             Teacher foundedTeacher = optionalTeacher.get();
             foundedTeacher.setName(teacher.getName());
             foundedTeacher.setEmail(teacher.getEmail());
@@ -44,9 +45,9 @@ public class TeacherRepository {
         return teachers.add(teacher);
     }
 
-    public Optional<Teacher> partiallyUpdateTeacher(Teacher teacher){
+    public Optional<Teacher> partiallyUpdateTeacher(Teacher teacher) {
         Optional<Teacher> optionalTeacher = findTeacherByEmail(teacher.getEmail());
-        if(optionalTeacher.isPresent()){
+        if (optionalTeacher.isPresent()) {
             Teacher updatedTeacher = optionalTeacher.get();
             Optional.ofNullable(teacher.getEmail()).ifPresent(updatedTeacher::setEmail);
             Optional.ofNullable(teacher.getName()).ifPresent(updatedTeacher::setName);

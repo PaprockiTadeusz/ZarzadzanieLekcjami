@@ -52,6 +52,6 @@ public class StudentController {
                 .map(s -> new ResponseEntity<>(s, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity("Brak studenta o danym emailu " + updatedStudent.getEmail(), HttpStatus.NOT_FOUND));
     }
-    
+
 
 }

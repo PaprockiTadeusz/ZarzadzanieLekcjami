@@ -25,7 +25,7 @@ public class StudentRepository {
                 .findAny();
     }
 
-    public List<Student> findAll(){
+    public List<Student> findAll() {
         return students;
     }
 

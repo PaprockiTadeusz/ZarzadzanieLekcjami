@@ -46,8 +46,8 @@ public class TeacherControllerTest {
         Teacher teacherToAdd = new Teacher("Batłomiej", "bartek@gmail.com");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/teachers")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(teacherToAdd)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(teacherToAdd)))
                 .andExpect(MockMvcResultMatchers.status().isCreated());
     }
 
@@ -73,14 +73,14 @@ public class TeacherControllerTest {
     void shouldUpdateTeacher() throws Exception {
         Teacher teacherToAdd = new Teacher("Arkadiuszz Domański", "arkadiuszz.domanski@gmail.com");
         mockMvc.perform(MockMvcRequestBuilders.post("/teachers")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(teacherToAdd)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(teacherToAdd)))
                 .andExpect(MockMvcResultMatchers.status().isCreated());
 
         Teacher teacherToUpdate = new Teacher("Arkadiuszz Domański", "arkadiuszz.domanski@gmail.com");
         mockMvc.perform(MockMvcRequestBuilders.put("/teachers")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(teacherToUpdate)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(teacherToUpdate)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.email").value("arkadiuszz.domanski@gmail.com"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Arkadiuszz Domański"));
     }
@@ -101,7 +101,7 @@ public class TeacherControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.email").value("arkadiuszz.domanski@gmail.com"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Arkadiuszz Domański"));
     }
-    }
+}
 
 
 
