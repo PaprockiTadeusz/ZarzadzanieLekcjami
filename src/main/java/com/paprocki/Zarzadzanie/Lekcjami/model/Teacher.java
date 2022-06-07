@@ -8,9 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Student {
+public class Teacher {
     private String name;
     private String email;
-    private String teacher;
-    private Integer rate;
 }

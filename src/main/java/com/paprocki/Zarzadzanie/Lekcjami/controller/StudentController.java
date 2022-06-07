@@ -1,73 +1,57 @@
 package com.paprocki.Zarzadzanie.Lekcjami.controller;
 
 import com.paprocki.Zarzadzanie.Lekcjami.model.Student;
+import com.paprocki.Zarzadzanie.Lekcjami.services.StudentService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/students")
 public class StudentController {
 
-    private List<Student> students = new ArrayList<>();
-
-    @PostConstruct
-    public void init() {
-        students.add(new Student("Mirosław Kowalski", "mirek@gmail.com", "Michał Leja", 200));
-        students.add(new Student("Jakub Nowicki", "jakub8899wp.pl", "Michał Leja", 200));
-    }
+    private final StudentService studentService;
 
     @GetMapping
-    public ResponseEntity getAllStudents() {
-        return new ResponseEntity(students, HttpStatus.OK);
+    public ResponseEntity<List<Student>> getAllStudents() {
+        return new ResponseEntity<>(studentService.getAllStudents(), HttpStatus.OK);
     }
 
     @GetMapping("/{email}")
-    public ResponseEntity getSingleStudent(@PathVariable String email) {
-        return students.stream()
-                .filter(student -> student.getEmail().equals(email))
-                .findAny()
-                .map(student -> new ResponseEntity(student, HttpStatus.OK))
+    public ResponseEntity<Student> getSingleStudent(@PathVariable String email) {
+        return studentService.getSingleStudent(email)
+                .map(student -> new ResponseEntity<>(student, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity("Brak studenta o danym emailu " + email, HttpStatus.NOT_FOUND));
     }
 
     @PostMapping
-    public ResponseEntity addStudent(@RequestBody Student student) {
-        if (students.stream().anyMatch(s -> s.getEmail().equals(student.getEmail()))) {
+    public ResponseEntity<Student> addStudent(@RequestBody Student student) {
+        boolean result = studentService.addStudent(student);
+        if (result) {
+            return new ResponseEntity<>(student, HttpStatus.CREATED);
+        } else {
             return new ResponseEntity("Konto z takim email już istnieje", HttpStatus.BAD_REQUEST);
         }
-        students.add(student);
-        return new ResponseEntity(HttpStatus.CREATED);
     }
 
     @PutMapping()
-    public ResponseEntity editStudent(@RequestBody Student updatedStudent) {
-        if (students.stream().noneMatch(student -> student.getEmail().equals(updatedStudent.getEmail()))) {
-            return new ResponseEntity("Brak studenta o danym emailu", HttpStatus.BAD_REQUEST);
-        }
-        Student student = students.stream().filter(s -> s.getEmail().equals(updatedStudent.getEmail())).findAny().get();
-        student.setEmail(updatedStudent.getEmail());
-        student.setName(updatedStudent.getName());
-        student.setTeacher(updatedStudent.getTeacher());
-        student.setRate(updatedStudent.getRate());
-        return new ResponseEntity(student, HttpStatus.OK);
+    public ResponseEntity<Student> editStudent(@RequestBody Student updatedStudent) {
+        return studentService.editStudent(updatedStudent)
+                .map(s -> new ResponseEntity<>(s, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity("Brak studenta o danym emailu " + updatedStudent.getEmail(), HttpStatus.NOT_FOUND));
     }
+
+
     @PatchMapping
-    public ResponseEntity editStudentPartially(@RequestBody Student updatedStudent){
-        if (students.stream().noneMatch(student -> student.getEmail().equals(updatedStudent.getEmail()))){
-            return new ResponseEntity("Brak studenta o danym emailu", HttpStatus.BAD_REQUEST);
-        }
-        Student newStudent = (Student) students.stream().filter(s -> s.getEmail().equals(updatedStudent.getEmail()));
-        Optional.ofNullable(updatedStudent.getEmail()).ifPresent(newStudent::setEmail);
-        Optional.ofNullable(updatedStudent.getName()).ifPresent(newStudent::setEmail);
-        Optional.ofNullable(updatedStudent.getRate()).ifPresent(newStudent::setRate);
-        Optional.ofNullable(updatedStudent.getTeacher()).ifPresent(newStudent::setTeacher);
-        return new ResponseEntity(newStudent, HttpStatus.OK);
+    public ResponseEntity<Student> editStudentPartially(@RequestBody Student updatedStudent) {
+        return studentService.editStudentPartially(updatedStudent)
+                .map(s -> new ResponseEntity<>(s, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity("Brak studenta o danym emailu " + updatedStudent.getEmail(), HttpStatus.NOT_FOUND));
     }
+
 
 }
