@@ -1,4 +1,4 @@
-package com.paprocki.Zarzadzanie.Lekcjami.model;
+package com.paprocki.Zarzadzanie.Lekcjami.dto;
 
 import lombok.*;
 
@@ -8,7 +8,9 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Teacher {
+public class StudentDTO {
     private String name;
     private String email;
+    private String teacher;
+    private Integer rate;
 }

@@ -1,4 +1,4 @@
-package com.paprocki.Zarzadzanie.Lekcjami.model;
+package com.paprocki.Zarzadzanie.Lekcjami.dto;
 
 import lombok.*;
 
@@ -10,10 +10,10 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Lesson {
+public class LessonDTO {
     private long lessonId;
     private LocalDate date;
     private String teacherName;
     private String studentName;
-    private String Topic;
+    private String topic;
 }

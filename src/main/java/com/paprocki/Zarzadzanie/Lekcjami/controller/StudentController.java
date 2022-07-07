@@ -1,6 +1,6 @@
 package com.paprocki.Zarzadzanie.Lekcjami.controller;
 
-import com.paprocki.Zarzadzanie.Lekcjami.model.Student;
+import com.paprocki.Zarzadzanie.Lekcjami.dto.StudentDTO;
 import com.paprocki.Zarzadzanie.Lekcjami.services.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,40 +17,40 @@ public class StudentController {
     private final StudentService studentService;
 
     @GetMapping
-    public ResponseEntity<List<Student>> getAllStudents() {
+    public ResponseEntity<List<StudentDTO>> getAllStudents() {
         return new ResponseEntity<>(studentService.getAllStudents(), HttpStatus.OK);
     }
 
     @GetMapping("/{email}")
-    public ResponseEntity<Student> getSingleStudent(@PathVariable String email) {
+    public ResponseEntity<StudentDTO> getSingleStudent(@PathVariable String email) {
         return studentService.getSingleStudent(email)
-                .map(student -> new ResponseEntity<>(student, HttpStatus.OK))
+                .map(studentDTO -> new ResponseEntity<>(studentDTO, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity("Brak studenta o danym emailu " + email, HttpStatus.NOT_FOUND));
     }
 
     @PostMapping
-    public ResponseEntity<Student> addStudent(@RequestBody Student student) {
-        boolean result = studentService.addStudent(student);
+    public ResponseEntity<StudentDTO> addStudent(@RequestBody StudentDTO studentDTO) {
+        boolean result = studentService.addStudent(studentDTO);
         if (result) {
-            return new ResponseEntity<>(student, HttpStatus.CREATED);
+            return new ResponseEntity<>(studentDTO, HttpStatus.CREATED);
         } else {
             return new ResponseEntity("Konto z takim email już istnieje", HttpStatus.BAD_REQUEST);
         }
     }
 
     @PutMapping()
-    public ResponseEntity<Student> editStudent(@RequestBody Student updatedStudent) {
-        return studentService.editStudent(updatedStudent)
+    public ResponseEntity<StudentDTO> editStudent(@RequestBody StudentDTO updatedStudentDTO) {
+        return studentService.editStudent(updatedStudentDTO)
                 .map(s -> new ResponseEntity<>(s, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity("Brak studenta o danym emailu " + updatedStudent.getEmail(), HttpStatus.NOT_FOUND));
+                .orElseGet(() -> new ResponseEntity("Brak studenta o danym emailu " + updatedStudentDTO.getEmail(), HttpStatus.NOT_FOUND));
     }
 
 
     @PatchMapping
-    public ResponseEntity<Student> editStudentPartially(@RequestBody Student updatedStudent) {
-        return studentService.editStudentPartially(updatedStudent)
+    public ResponseEntity<StudentDTO> editStudentPartially(@RequestBody StudentDTO updatedStudentDTO) {
+        return studentService.editStudentPartially(updatedStudentDTO)
                 .map(s -> new ResponseEntity<>(s, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity("Brak studenta o danym emailu " + updatedStudent.getEmail(), HttpStatus.NOT_FOUND));
+                .orElseGet(() -> new ResponseEntity("Brak studenta o danym emailu " + updatedStudentDTO.getEmail(), HttpStatus.NOT_FOUND));
     }
 
 

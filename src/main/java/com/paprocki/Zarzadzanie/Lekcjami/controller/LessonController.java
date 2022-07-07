@@ -1,6 +1,6 @@
 package com.paprocki.Zarzadzanie.Lekcjami.controller;
 
-import com.paprocki.Zarzadzanie.Lekcjami.model.Lesson;
+import com.paprocki.Zarzadzanie.Lekcjami.dto.LessonDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,72 +15,72 @@ import java.util.Optional;
 @RequestMapping("/lessons")
 public class LessonController {
 
-    private List<Lesson> lessons = new ArrayList<>();
+    private List<LessonDTO> lessonDTOS = new ArrayList<>();
 
     @PostConstruct
     public void init() {
-        lessons.add(new Lesson(1, LocalDate.of(2020, 1, 8), "Eryk Dobaj", "Taduesz Paprocki", "Java"));
-        lessons.add(new Lesson(2, LocalDate.of(2021, 3, 8), "Robert Maklowicz", "Taduesz Paprocki", "Gotowanie"));
-        lessons.add(new Lesson(3, LocalDate.of(2001, 3, 18), "Dawid Fazowski", "Taduesz Paprocki", "Autostop"));
+        lessonDTOS.add(new LessonDTO(1, LocalDate.of(2020, 1, 8), "Eryk Dobaj", "Taduesz Paprocki", "Java"));
+        lessonDTOS.add(new LessonDTO(2, LocalDate.of(2021, 3, 8), "Robert Maklowicz", "Taduesz Paprocki", "Gotowanie"));
+        lessonDTOS.add(new LessonDTO(3, LocalDate.of(2001, 3, 18), "Dawid Fazowski", "Taduesz Paprocki", "Autostop"));
     }
 
     @GetMapping
     public ResponseEntity getAllLessons() {
-        return new ResponseEntity(lessons, HttpStatus.OK);
+        return new ResponseEntity(lessonDTOS, HttpStatus.OK);
     }
 
     @GetMapping("/{lessonId}")
     public ResponseEntity getSingleLesson(@PathVariable long lessonId) {
-        return lessons.stream()
-                .filter(lesson -> lesson.getLessonId() == lessonId)
+        return lessonDTOS.stream()
+                .filter(lessonDTO -> lessonDTO.getLessonId() == lessonId)
                 .findFirst()
-                .map(lesson -> new ResponseEntity(lesson, HttpStatus.OK))
+                .map(lessonDTO -> new ResponseEntity(lessonDTO, HttpStatus.OK))
                 .orElse(new ResponseEntity("Brak lekcji o podanym id " + lessonId, HttpStatus.NOT_FOUND));
 //                .orElseGet(() -> new ResponseEntity("Brak lekcji o podanym id " + lessonId, HttpStatus.NOT_FOUND));
     }
 
     @PostMapping
-    public ResponseEntity addLesson(@RequestBody Lesson lesson) {
-        if (lessons.stream().anyMatch(l -> l.getLessonId() == lesson.getLessonId())) {
+    public ResponseEntity addLesson(@RequestBody LessonDTO lessonDTO) {
+        if (lessonDTOS.stream().anyMatch(l -> l.getLessonId() == lessonDTO.getLessonId())) {
             return new ResponseEntity("Lekcja o podanym id juz istnieje", HttpStatus.BAD_REQUEST);
         }
-        lessons.add(lesson);
+        lessonDTOS.add(lessonDTO);
         return new ResponseEntity(HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{lessonId}")
     public ResponseEntity deleteLesson(@PathVariable long lessonId) {
-        if (!lessons.stream().anyMatch(l -> l.getLessonId() == lessonId)) {
+        if (!lessonDTOS.stream().anyMatch(l -> l.getLessonId() == lessonId)) {
             return new ResponseEntity("Lekcja o podanym id nie istnieje", HttpStatus.BAD_REQUEST);
         }
-        lessons.remove(lessonId);
+        lessonDTOS.remove(lessonId);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping
-    public ResponseEntity editLesson(@RequestBody Lesson updatedLesson) {
-        if (lessons.stream().noneMatch(les -> les.getLessonId() == updatedLesson.getLessonId())) {
+    public ResponseEntity editLesson(@RequestBody LessonDTO updatedLessonDTO) {
+        if (lessonDTOS.stream().noneMatch(les -> les.getLessonId() == updatedLessonDTO.getLessonId())) {
             return new ResponseEntity("Lekcja o podanym id juz istnieje", HttpStatus.BAD_REQUEST);
         }
-        Lesson newLesson = lessons.stream().filter(l -> l.getLessonId() == updatedLesson.getLessonId()).findAny().get();
-        newLesson.setLessonId(updatedLesson.getLessonId());
-        newLesson.setDate(updatedLesson.getDate());
-        newLesson.setStudentName(updatedLesson.getStudentName());
-        newLesson.setTeacherName(updatedLesson.getTeacherName());
-        newLesson.setTopic(updatedLesson.getTopic());
-        return new ResponseEntity(newLesson, HttpStatus.OK);
+        LessonDTO newLessonDTO = lessonDTOS.stream().filter(l -> l.getLessonId() == updatedLessonDTO.getLessonId()).findAny().get();
+        newLessonDTO.setLessonId(updatedLessonDTO.getLessonId());
+        newLessonDTO.setDate(updatedLessonDTO.getDate());
+        newLessonDTO.setStudentName(updatedLessonDTO.getStudentName());
+        newLessonDTO.setTeacherName(updatedLessonDTO.getTeacherName());
+        newLessonDTO.setTopic(updatedLessonDTO.getTopic());
+        return new ResponseEntity(newLessonDTO, HttpStatus.OK);
     }
 
     @PatchMapping
-    public ResponseEntity editLessonPartially(@RequestBody Lesson updatedLesson) {
-        if (lessons.stream().noneMatch(les -> les.getLessonId() == updatedLesson.getLessonId())) {
+    public ResponseEntity editLessonPartially(@RequestBody LessonDTO updatedLessonDTO) {
+        if (lessonDTOS.stream().noneMatch(les -> les.getLessonId() == updatedLessonDTO.getLessonId())) {
             return new ResponseEntity("Lekcja o podanym id juz istnieje", HttpStatus.BAD_REQUEST);
         }
-        Lesson newLesson = lessons.stream().filter(l -> l.getLessonId() == updatedLesson.getLessonId()).findAny().get();
-        Optional.ofNullable(updatedLesson.getTopic()).ifPresent(newLesson::setTopic);
-        Optional.ofNullable(updatedLesson.getDate()).ifPresent(newLesson::setDate);
-        Optional.ofNullable(updatedLesson.getStudentName()).ifPresent(newLesson::setStudentName);
-        Optional.ofNullable(updatedLesson.getTeacherName()).ifPresent(newLesson::setTeacherName);
-        return new ResponseEntity(newLesson, HttpStatus.OK);
+        LessonDTO newLessonDTO = lessonDTOS.stream().filter(l -> l.getLessonId() == updatedLessonDTO.getLessonId()).findAny().get();
+        Optional.ofNullable(updatedLessonDTO.getTopic()).ifPresent(newLessonDTO::setTopic);
+        Optional.ofNullable(updatedLessonDTO.getDate()).ifPresent(newLessonDTO::setDate);
+        Optional.ofNullable(updatedLessonDTO.getStudentName()).ifPresent(newLessonDTO::setStudentName);
+        Optional.ofNullable(updatedLessonDTO.getTeacherName()).ifPresent(newLessonDTO::setTeacherName);
+        return new ResponseEntity(newLessonDTO, HttpStatus.OK);
     }
 }

@@ -1,14 +1,16 @@
 package com.paprocki.Zarzadzanie.Lekcjami.enitites;
 
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @NoArgsConstructor
-@Entity
+@AllArgsConstructor
+@Getter
+@Setter
+@Entity(name = "teacher")
+@Builder
 public class TeacherEntity {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -16,5 +18,9 @@ public class TeacherEntity {
 
     private String name;
 
+    @Column(unique = true)
     private String email;
+
+    @OneToMany(mappedBy = "teacher")
+    private List<LessonEntity> lessons;
 }

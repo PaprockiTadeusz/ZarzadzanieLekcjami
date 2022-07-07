@@ -1,6 +1,6 @@
 package com.paprocki.Zarzadzanie.Lekcjami.repository;
 
-import com.paprocki.Zarzadzanie.Lekcjami.model.Student;
+import com.paprocki.Zarzadzanie.Lekcjami.dto.StudentDTO;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
@@ -11,47 +11,47 @@ import java.util.Optional;
 @Repository
 public class StudentRepository {
 
-    public List<Student> students = new ArrayList<>();
+    public List<StudentDTO> studentDTOS = new ArrayList<>();
 
     @PostConstruct
     public void init() {
-        students.add(new Student("Mirosław Kowalski", "mirek@gmail.com", "Michał Leja", 200));
-        students.add(new Student("Jakub Nowicki", "jakub8899wp.pl", "Michał Leja", 200));
+        studentDTOS.add(new StudentDTO("Mirosław Kowalski", "mirek@gmail.com", "Michał Leja", 200));
+        studentDTOS.add(new StudentDTO("Jakub Nowicki", "jakub8899wp.pl", "Michał Leja", 200));
     }
 
-    public Optional<Student> findByEmail(String email) {
-        return students.stream()
-                .filter(student -> student.getEmail().equals(email))
+    public Optional<StudentDTO> findByEmail(String email) {
+        return studentDTOS.stream()
+                .filter(studentDTO -> studentDTO.getEmail().equals(email))
                 .findAny();
     }
 
-    public List<Student> findAll() {
-        return students;
+    public List<StudentDTO> findAll() {
+        return studentDTOS;
     }
 
-    public Optional<Student> updateStudent(Student student) {
-        Optional<Student> optionalStudent = findByEmail(student.getEmail());
+    public Optional<StudentDTO> updateStudent(StudentDTO studentDTO) {
+        Optional<StudentDTO> optionalStudent = findByEmail(studentDTO.getEmail());
         if (optionalStudent.isPresent()) {
-            Student foundedStudent = optionalStudent.get();
-            foundedStudent.setName(student.getName());
-            foundedStudent.setTeacher(student.getTeacher());
-            foundedStudent.setRate(student.getRate());
+            StudentDTO foundedStudentDTO = optionalStudent.get();
+            foundedStudentDTO.setName(studentDTO.getName());
+            foundedStudentDTO.setTeacher(studentDTO.getTeacher());
+            foundedStudentDTO.setRate(studentDTO.getRate());
         }
         return optionalStudent;
     }
 
-    public Optional<Student> partiallyUpdateStudent(Student student) {
-        Optional<Student> optionalStudent = findByEmail(student.getEmail());
+    public Optional<StudentDTO> partiallyUpdateStudent(StudentDTO studentDTO) {
+        Optional<StudentDTO> optionalStudent = findByEmail(studentDTO.getEmail());
         if (optionalStudent.isPresent()) {
-            Student updatedStudent = optionalStudent.get();
-            Optional.ofNullable(student.getName()).ifPresent(updatedStudent::setName);
-            Optional.ofNullable(student.getRate()).ifPresent(updatedStudent::setRate);
-            Optional.ofNullable(student.getTeacher()).ifPresent(updatedStudent::setTeacher);
+            StudentDTO updatedStudentDTO = optionalStudent.get();
+            Optional.ofNullable(studentDTO.getName()).ifPresent(updatedStudentDTO::setName);
+            Optional.ofNullable(studentDTO.getRate()).ifPresent(updatedStudentDTO::setRate);
+            Optional.ofNullable(studentDTO.getTeacher()).ifPresent(updatedStudentDTO::setTeacher);
         }
         return optionalStudent;
     }
 
-    public boolean add(Student student) {
-        return students.add(student);
+    public boolean add(StudentDTO studentDTO) {
+        return studentDTOS.add(studentDTO);
     }
 }
