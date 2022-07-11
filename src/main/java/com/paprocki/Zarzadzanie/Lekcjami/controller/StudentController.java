@@ -1,6 +1,7 @@
 package com.paprocki.Zarzadzanie.Lekcjami.controller;
 
 import com.paprocki.Zarzadzanie.Lekcjami.dto.StudentDTO;
+import com.paprocki.Zarzadzanie.Lekcjami.exceptions.EmailUsedExecption;
 import com.paprocki.Zarzadzanie.Lekcjami.services.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,13 +30,12 @@ public class StudentController {
     }
 
     @PostMapping
-    public ResponseEntity<StudentDTO> addStudent(@RequestBody StudentDTO studentDTO) {
+    public ResponseEntity<StudentDTO> addStudent(@RequestBody StudentDTO studentDTO) throws EmailUsedExecption {
         boolean result = studentService.addStudent(studentDTO);
-        if (result) {
-            return new ResponseEntity<>(studentDTO, HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity("Konto z takim email już istnieje", HttpStatus.BAD_REQUEST);
+        if (!result) {
+            throw new EmailUsedExecption("Student z takim emailem istnieje", HttpStatus.BAD_REQUEST);
         }
+        return new ResponseEntity<>(studentDTO, HttpStatus.CREATED);
     }
 
     @PutMapping()
