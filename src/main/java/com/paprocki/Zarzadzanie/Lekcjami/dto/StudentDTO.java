@@ -1,6 +1,10 @@
 package com.paprocki.Zarzadzanie.Lekcjami.dto;
 
+import com.paprocki.Zarzadzanie.Lekcjami.enitites.LessonEntity;
+import com.paprocki.Zarzadzanie.Lekcjami.enitites.TeacherEntity;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -13,4 +17,7 @@ public class StudentDTO {
     private String email;
     private String teacher;
     private Integer rate;
+    private List<LessonEntity> lessons;
+
+
 }

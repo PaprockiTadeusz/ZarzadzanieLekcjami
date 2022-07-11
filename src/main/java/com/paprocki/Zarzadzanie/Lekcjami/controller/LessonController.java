@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,9 +20,9 @@ public class LessonController {
 
     @PostConstruct
     public void init() {
-        lessonDTOS.add(new LessonDTO(1, LocalDate.of(2020, 1, 8), "Eryk Dobaj", "Taduesz Paprocki", "Java"));
-        lessonDTOS.add(new LessonDTO(2, LocalDate.of(2021, 3, 8), "Robert Maklowicz", "Taduesz Paprocki", "Gotowanie"));
-        lessonDTOS.add(new LessonDTO(3, LocalDate.of(2001, 3, 18), "Dawid Fazowski", "Taduesz Paprocki", "Autostop"));
+        lessonDTOS.add(new LessonDTO(1, LocalDateTime.of(2020, 1, 8, 1, 1), "Eryk Dobaj", "Taduesz Paprocki", "Java"));
+        lessonDTOS.add(new LessonDTO(2, LocalDateTime.of(2021, 3, 8,2,3), "Robert Maklowicz", "Taduesz Paprocki", "Gotowanie"));
+        lessonDTOS.add(new LessonDTO(3, LocalDateTime.of(2001, 3, 18,4,5), "Dawid Fazowski", "Taduesz Paprocki", "Autostop"));
     }
 
     @GetMapping
