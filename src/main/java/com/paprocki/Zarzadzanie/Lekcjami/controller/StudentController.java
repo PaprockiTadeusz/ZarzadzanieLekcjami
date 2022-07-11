@@ -1,5 +1,6 @@
 package com.paprocki.Zarzadzanie.Lekcjami.controller;
 
+import com.paprocki.Zarzadzanie.Lekcjami.exceptions.EmailUsedExecption;
 import com.paprocki.Zarzadzanie.Lekcjami.model.Student;
 import com.paprocki.Zarzadzanie.Lekcjami.services.StudentService;
 import lombok.RequiredArgsConstructor;
@@ -29,13 +30,13 @@ public class StudentController {
     }
 
     @PostMapping
-    public ResponseEntity<Student> addStudent(@RequestBody Student student) {
+    public ResponseEntity<Student> addStudent(@RequestBody Student student) throws EmailUsedExecption {
         boolean result = studentService.addStudent(student);
-        if (result) {
-            return new ResponseEntity<>(student, HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity("Konto z takim email już istnieje", HttpStatus.BAD_REQUEST);
+        if (!result) {
+            throw new EmailUsedExecption("Student z takim emailem istnieje", HttpStatus.BAD_REQUEST);
+
         }
+        return new ResponseEntity<>(student, HttpStatus.CREATED);
     }
 
     @PutMapping()
