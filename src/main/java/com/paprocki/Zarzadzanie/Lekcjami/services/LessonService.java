@@ -33,12 +33,31 @@ public class LessonService {
         return Optional.of(lessonDTO);
     }
 
-//    public Optional<LessonDTO> updateLessonPartially(LessonDTO lessonDTO){
-//        return lessonRepository.findById(lessonDTO.getLessonId())
-//                .map(entity -> {
-//                    Optional.of(lessonDTO.getDate()).ifPresent(entity::setDate);
-//                    Optional.of(lessonDTO.getTeacherName()).ifPresent(entity::setTeacher);
-//                    Optional.of(lessonDTO.getTopic()).ifPresent(entity::setTopic);
-//                })
-//    }
+    public boolean addLesson(LessonDTO lessonDTO) {
+        if(lessonRepository.findById(lessonDTO.getLessonId()).isEmpty()){
+            lessonRepository.save(modelMapper.map(lessonDTO, LessonEntity.class));
+            return true;
+        }
+        return false;
+    }
+
+    public Optional<LessonDTO> updateLessonPartially(LessonDTO lessonDTO){
+        return lessonRepository.findById(lessonDTO.getLessonId())
+                .map(entity -> {
+                    Optional.of(lessonDTO.getDate()).ifPresent(entity::setDate);
+                    Optional.of(lessonDTO.getTeacher()).ifPresent(entity::setTeacher);
+                    Optional.of(lessonDTO.getStudent()).ifPresent(entity::setStudent);
+                    Optional.of(lessonDTO.getTopic()).ifPresent(entity::setTopic);
+                    LessonEntity save = lessonRepository.save(entity);
+                    return Optional.of(modelMapper.map(save, LessonDTO.class));
+                }).orElseGet(Optional::empty);
+    }
+
+    public boolean deleteLesson(long lessonId){
+        if(lessonRepository.findById(lessonId).isEmpty()){
+            return false;
+        }
+        return true;
+
+    }
 }

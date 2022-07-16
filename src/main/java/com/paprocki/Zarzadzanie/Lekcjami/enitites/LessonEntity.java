@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 public class LessonEntity {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     private LocalDateTime date;
@@ -25,4 +25,5 @@ public class LessonEntity {
     private StudentEntity student;
 
     private String topic;
+
 }

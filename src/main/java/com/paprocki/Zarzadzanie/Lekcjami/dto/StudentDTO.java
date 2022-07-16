@@ -15,7 +15,7 @@ import java.util.List;
 public class StudentDTO {
     private String name;
     private String email;
-    private String teacher;
+    private TeacherEntity teacher;
     private Integer rate;
     private List<LessonEntity> lessons;
 
